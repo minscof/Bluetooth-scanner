@@ -170,7 +170,8 @@ while True:
 						# More than 2 seconds from last seen, so we can call php callback. This prevent overload from high freq advertising devices
 						if ts > tag[1]+2:
 							tag[1]=ts # update lastseen
-							logging.debug('Tag %s seen @ %i',tag[0],tag[1])
+							rssi, = struct.unpack("b", pkt[-1])
+							logging.debug('Tag %s seen @ %i - rssi= %i',tag[0],tag[1],rssi)
 							jsonTag = json.dumps(TAG_DATA,separators=(',', ':')) # json encode TAG_DATA list
 							os.system("sudo -u " + processUser + " php " + callback + " callback '" + jsonTag + "'") #call php callback
 	sock.setsockopt( bluez.SOL_HCI, bluez.HCI_FILTER, old_filter )
